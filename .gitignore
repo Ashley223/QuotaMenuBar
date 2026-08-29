@@ -21,3 +21,9 @@ build/
 *.ipa
 *.app.dSYM.zip
 *.xcarchive
+
+# build output
+build/
+dist/
+
+__pycache__/

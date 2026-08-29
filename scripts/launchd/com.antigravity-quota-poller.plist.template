@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>Label</key>
+    <string>com.antigravity-quota-poller</string>
+    <key>ProgramArguments</key>
+    <array>
+        <string>__PYTHON3__</string>
+        <string>__HOME__/.antigravity/fetch_antigravity_usage.py</string>
+    </array>
+    <key>StartInterval</key>
+    <integer>60</integer>
+    <key>StandardOutPath</key>
+    <string>/tmp/antigravity-quota-poller.log</string>
+    <key>StandardErrorPath</key>
+    <string>/tmp/antigravity-quota-poller.err.log</string>
+    <key>RunAtLoad</key>
+    <true/>
+</dict>
+</plist>

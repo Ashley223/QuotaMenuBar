@@ -6,13 +6,13 @@
     <string>com.quota-menubar.daily-usage-poller</string>
     <key>ProgramArguments</key>
     <array>
-        <string>/opt/homebrew/bin/python3</string>
+        <string>__PYTHON3__</string>
         <string>__HOME__/.quota-menubar/fetch_daily_usage.py</string>
     </array>
     <key>EnvironmentVariables</key>
     <dict>
         <key>PATH</key>
-        <string>/opt/homebrew/bin:/usr/bin:/bin:/usr/sbin:/sbin</string>
+        <string>__NODE_BIN__:/usr/bin:/bin:/usr/sbin:/sbin</string>
     </dict>
     <key>StartInterval</key>
     <integer>300</integer>

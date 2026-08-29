@@ -1,0 +1,92 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<style>html,body{margin:0;padding:0;width:100%;height:100%;background:transparent}svg{display:block}</style>
+</head>
+<body>
+<svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 1024 1024" preserveAspectRatio="xMidYMid meet">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#1d2142"/>
+      <stop offset="58%" stop-color="#0e1224"/>
+      <stop offset="100%" stop-color="#070811"/>
+    </linearGradient>
+    <linearGradient id="rim" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity=".42"/>
+      <stop offset="42%" stop-color="#ffffff" stop-opacity=".04"/>
+      <stop offset="100%" stop-color="#ffffff" stop-opacity="0"/>
+    </linearGradient>
+    <radialGradient id="bloom" cx="57%" cy="40%" r="46%">
+      <stop offset="0%" stop-color="#4b6bff" stop-opacity=".55"/>
+      <stop offset="100%" stop-color="#4b6bff" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="barA" x1="0" y1="1" x2="0" y2="0">
+      <stop offset="0%" stop-color="#6a4bff"/>
+      <stop offset="100%" stop-color="#33d6ff"/>
+    </linearGradient>
+    <linearGradient id="barHot" x1="0" y1="1" x2="0" y2="0">
+      <stop offset="0%" stop-color="#7a52ff"/>
+      <stop offset="55%" stop-color="#37ecff"/>
+      <stop offset="100%" stop-color="#eafcff"/>
+    </linearGradient>
+    <linearGradient id="refl" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#5aa9ff" stop-opacity=".18"/>
+      <stop offset="100%" stop-color="#5aa9ff" stop-opacity="0"/>
+    </linearGradient>
+    <filter id="glow" x="-60%" y="-60%" width="220%" height="220%">
+      <feGaussianBlur stdDeviation="11" result="b"/>
+      <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <filter id="shadow" x="-40%" y="-40%" width="180%" height="180%">
+      <feDropShadow dx="0" dy="16" stdDeviation="22" flood-color="#000000" flood-opacity="0.4"/>
+    </filter>
+    <clipPath id="squircle">
+      <rect x="88" y="88" width="848" height="848" rx="196"/>
+    </clipPath>
+  </defs>
+
+  <!-- body + shadow -->
+  <rect x="88" y="88" width="848" height="848" rx="196" fill="url(#bg)" filter="url(#shadow)"/>
+
+  <g clip-path="url(#squircle)">
+    <rect x="88" y="88" width="848" height="848" fill="url(#bg)"/>
+    <rect x="300" y="150" width="520" height="520" fill="url(#bloom)"/>
+
+    <!-- reflections -->
+    <g>
+      <rect x="252" y="702" width="72" height="150" rx="36" fill="url(#refl)"/>
+      <rect x="364" y="702" width="72" height="150" rx="36" fill="url(#refl)"/>
+      <rect x="476" y="702" width="72" height="150" rx="36" fill="url(#refl)"/>
+      <rect x="588" y="702" width="72" height="150" rx="36" fill="url(#refl)"/>
+      <rect x="700" y="702" width="72" height="150" rx="36" fill="url(#refl)"/>
+    </g>
+
+    <!-- baseline -->
+    <line x1="228" y1="700" x2="796" y2="700" stroke="#414a74" stroke-width="6" stroke-linecap="round"/>
+
+    <!-- bars -->
+    <rect x="252" y="550" width="72" height="150" rx="34" fill="url(#barA)"/>
+    <rect x="364" y="400" width="72" height="300" rx="34" fill="url(#barA)"/>
+    <rect x="476" y="490" width="72" height="210" rx="34" fill="url(#barA)"/>
+    <g filter="url(#glow)">
+      <rect x="588" y="340" width="72" height="360" rx="34" fill="url(#barHot)"/>
+    </g>
+    <rect x="588" y="340" width="72" height="360" rx="34" fill="url(#barHot)"/>
+    <rect x="700" y="580" width="72" height="120" rx="34" fill="url(#barA)"/>
+
+    <!-- bright caps -->
+    <g filter="url(#glow)">
+      <rect x="252" y="550" width="72" height="20" rx="10" fill="#e9fbff" opacity=".9"/>
+      <rect x="364" y="400" width="72" height="20" rx="10" fill="#e9fbff" opacity=".9"/>
+      <rect x="476" y="490" width="72" height="20" rx="10" fill="#e9fbff" opacity=".9"/>
+      <rect x="588" y="340" width="72" height="22" rx="11" fill="#ffffff"/>
+      <rect x="700" y="580" width="72" height="20" rx="10" fill="#e9fbff" opacity=".9"/>
+    </g>
+
+    <!-- top rim highlight -->
+    <rect x="89" y="89" width="846" height="846" rx="195" fill="none" stroke="url(#rim)" stroke-width="2"/>
+  </g>
+</svg>
+</body>
+</html>

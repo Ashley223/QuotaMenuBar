@@ -64,7 +64,8 @@ final class QuotaViewModel {
         var parts: [String] = []
 
         if let c = claude {
-            parts.append("☁ 5h \(Int(c.fiveHourRemaining))%")
+            let warn = QuotaFormatting.isStale(c.updatedAt) ? "⚠ " : ""
+            parts.append("\(warn)☁ 5h \(Int(c.fiveHourRemaining))%")
             parts.append("7d \(Int(c.sevenDayRemaining))%")
         }
 

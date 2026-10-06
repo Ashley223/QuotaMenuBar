@@ -335,10 +335,14 @@ enum QuotaFormatting {
         }
     }
 
-    /// Whether data is stale (older than 3 hours).
+    /// Seconds after which a cache counts as stale. The slowest poller runs
+    /// every 5 minutes, so 15 minutes means at least two polls in a row failed.
+    static let staleAfter: TimeInterval = 900
+
+    /// Whether data is stale (older than `staleAfter`).
     static func isStale(_ fetchedDate: Date?, from now: Date = .now) -> Bool {
         guard let fetchedDate else { return false }
-        return now.timeIntervalSince(fetchedDate) > 10800
+        return now.timeIntervalSince(fetchedDate) > staleAfter
     }
 
     /// Compact token count. e.g. 27_603_168 → "27.6M", 903_954 → "904K", 290 → "290".

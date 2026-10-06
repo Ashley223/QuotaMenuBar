@@ -109,7 +109,7 @@ struct QuotaMenuBarView: View {
         .padding(.top, 8)
 
         // Updated age
-        ageRow(fetchedDate: claude.updatedAt)
+        ageRow(fetchedDate: claude.updatedAt, staleHint: "session may have expired, re-run setup-claude-auth.sh")
             .padding(.top, 4)
     }
 
@@ -290,13 +290,13 @@ struct QuotaMenuBarView: View {
 
     /// "Updated Xm ago" row, with stale warning.
     @ViewBuilder
-    private func ageRow(fetchedDate: Date?) -> some View {
+    private func ageRow(fetchedDate: Date?, staleHint: String? = nil) -> some View {
         if let ageText = QuotaFormatting.age(of: fetchedDate) {
             if QuotaFormatting.isStale(fetchedDate) {
                 HStack(spacing: 3) {
                     Image(systemName: "exclamationmark.triangle.fill")
                         .font(.system(size: 10))
-                    Text("Stale (>3h) — \(ageText)")
+                    Text("Stale — \(staleHint ?? ageText)")
                         .font(.system(size: 11))
                 }
                 .foregroundStyle(Color(.systemRed))

@@ -8,7 +8,9 @@
 #       ~/.quota-menubar/fetch_daily_usage.py   -> daily Claude Code tokens (every 5 min)
 #   • the menu bar app in /Applications, launched now and at every login
 #
-# Safe to re-run. Existing poller scripts are backed up to *.bak first.
+# Safe to re-run. Pollers already in ~/.claude or ~/.antigravity are left
+# untouched (they are hand-tuned); the one in ~/.quota-menubar is refreshed
+# and backed up to *.bak first.
 set -euo pipefail
 
 RED=$'\033[0;31m'; GRN=$'\033[0;32m'; YEL=$'\033[0;33m'; BLD=$'\033[1m'; NC=$'\033[0m'
@@ -47,8 +49,15 @@ place() { # src dst
     if [ -f "$2" ] && ! cmp -s "$1" "$2"; then cp "$2" "$2.bak"; warn "backed up existing $(basename "$2") -> $2.bak"; fi
     cp "$1" "$2"; chmod +x "$2"
 }
-place "$ROOT/scripts/fetch_claude_usage.py"       "$HOME/.claude/fetch_claude_usage.py"
-place "$ROOT/scripts/fetch_antigravity_usage.py"  "$HOME/.antigravity/fetch_antigravity_usage.py"
+place_if_missing() { # src dst — never overwrite an existing, already-debugged script
+    if [ -f "$2" ]; then
+        if ! cmp -s "$1" "$2"; then warn "keeping existing $2 (differs from repo copy)"; fi
+    else
+        place "$1" "$2"
+    fi
+}
+place_if_missing "$ROOT/scripts/fetch_claude_usage.py"      "$HOME/.claude/fetch_claude_usage.py"
+place_if_missing "$ROOT/scripts/fetch_antigravity_usage.py" "$HOME/.antigravity/fetch_antigravity_usage.py"
 place "$ROOT/scripts/fetch_daily_usage.py"        "$HOME/.quota-menubar/fetch_daily_usage.py"
 ok "poller scripts installed"
 

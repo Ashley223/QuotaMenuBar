@@ -211,6 +211,11 @@ struct QuotaMenuBarView: View {
                 .font(.system(size: 10, weight: isToday ? .semibold : .regular, design: .rounded))
                 .foregroundStyle(empty ? Color.secondary.opacity(0.5) : (isToday ? Color.primary : Color.secondary))
                 .frame(width: 46, alignment: .trailing)
+
+            Text(empty ? "" : QuotaFormatting.money(day.cost))
+                .font(.system(size: 10, weight: isToday ? .semibold : .regular, design: .rounded))
+                .foregroundStyle(isToday ? Color.primary : Color.secondary)
+                .frame(width: 44, alignment: .trailing)
         }
     }
 

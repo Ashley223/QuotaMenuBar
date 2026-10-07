@@ -26,6 +26,43 @@ DAYS = 7
 CCUSAGE = os.environ.get("CCUSAGE_BIN", "/opt/homebrew/bin/ccusage")
 
 
+# USD per million tokens: (input, cache write [5m], cache read, output).
+# ccusage's bundled price list lags behind new models and reports $0 for
+# them, so any model it prices at 0 is re-priced from this table.
+# Source: https://platform.claude.com/docs/en/about-claude/pricing
+PRICES = {
+    "claude-opus-5-5":   (4.00, 5.00, 0.20, 20.00),
+    "claude-opus-5":     (5.00, 6.25, 0.50, 25.00),
+    "claude-sonnet-5-5": (2.00, 2.50, 0.20, 10.00),
+    "claude-sonnet-5":   (2.00, 2.50, 0.20, 10.00),
+}
+
+
+def model_cost(m: dict) -> float:
+    """Cost of one modelBreakdowns entry: ccusage's own figure if it has one,
+    otherwise our price table (unknown models stay at 0)."""
+    if float(m.get("cost", 0) or 0) > 0:
+        return float(m["cost"])
+    name = m.get("modelName", "")
+    price = next((v for k, v in PRICES.items() if name.startswith(k)), None)
+    if not price:
+        return 0.0
+    i, w, r, o = price
+    return (
+        m.get("inputTokens", 0) * i
+        + m.get("cacheCreationTokens", 0) * w
+        + m.get("cacheReadTokens", 0) * r
+        + m.get("outputTokens", 0) * o
+    ) / 1_000_000
+
+
+def day_cost(r: dict) -> float:
+    breakdowns = r.get("modelBreakdowns")
+    if breakdowns:
+        return sum(model_cost(m) for m in breakdowns)
+    return float(r.get("totalCost", 0.0))
+
+
 def run_ccusage(since: str) -> dict:
     """Try offline first (cached pricing, no network); fall back to online."""
     last_err = None
@@ -75,7 +112,7 @@ def main() -> int:
             "output_tokens": int(r.get("outputTokens", 0)),
             "cache_creation_tokens": int(r.get("cacheCreationTokens", 0)),
             "cache_read_tokens": int(r.get("cacheReadTokens", 0)),
-            "cost": round(float(r.get("totalCost", 0.0)), 4),
+            "cost": round(day_cost(r), 4),
         })
 
     write_atomic({"updated_at": int(time.time()), "days": days})

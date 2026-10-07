@@ -58,7 +58,7 @@ final class QuotaViewModel {
     // MARK: - Menu Bar Title
 
     /// The string shown in the macOS menu bar.
-    /// Format: `☁ 5h 93% · 7d 22% · ✦ 90%`
+    /// Format: `☁ 5h 93% · 7d 22% · ✦ 90% · 16.3M · ≈$7.26` (last part = today's Claude Code usage)
     /// Uses system default color (no custom color on the title).
     var menuBarTitle: String {
         var parts: [String] = []
@@ -71,6 +71,10 @@ final class QuotaViewModel {
 
         if let g = gemini {
             parts.append("✦ \(Int(g.remaining))%")
+        }
+
+        if let today = dailyUsage?.today, today.totalTokens > 0 {
+            parts.append("\(QuotaFormatting.tokens(today.totalTokens)) · ≈\(QuotaFormatting.money(today.cost))")
         }
 
         return parts.isEmpty ? "✦ --" : parts.joined(separator: " · ")

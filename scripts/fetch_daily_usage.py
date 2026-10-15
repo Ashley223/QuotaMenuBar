@@ -26,15 +26,17 @@ DAYS = 7
 CCUSAGE = os.environ.get("CCUSAGE_BIN", "/opt/homebrew/bin/ccusage")
 
 
-# USD per million tokens: (input, cache write [5m], cache read, output).
+# USD per million tokens: (input, cache write [1h], cache read, output).
+# Claude Code writes 1-hour cache entries (checked against the session logs:
+# ephemeral_1h only), so the 1h write rate is used, not the 5m one.
 # ccusage's bundled price list lags behind new models and reports $0 for
 # them, so any model it prices at 0 is re-priced from this table.
 # Source: https://platform.claude.com/docs/en/about-claude/pricing
 PRICES = {
-    "claude-opus-5-5":   (4.00, 5.00, 0.20, 20.00),
-    "claude-opus-5":     (5.00, 6.25, 0.50, 25.00),
-    "claude-sonnet-5-5": (2.00, 2.50, 0.20, 10.00),
-    "claude-sonnet-5":   (2.00, 2.50, 0.20, 10.00),
+    "claude-opus-5-5":   (4.00, 8.00, 0.20, 20.00),
+    "claude-opus-5":     (5.00, 10.00, 0.50, 25.00),
+    "claude-sonnet-5-5": (2.00, 4.00, 0.20, 10.00),
+    "claude-sonnet-5":   (2.00, 4.00, 0.20, 10.00),
 }
 
 

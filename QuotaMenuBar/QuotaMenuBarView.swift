@@ -172,7 +172,7 @@ struct QuotaMenuBarView: View {
 
         // Window total
         HStack(spacing: 4) {
-            Text("7-day total")
+            Text("7-day total (≈ ¥\(String(format: "%.1f", QuotaFormatting.cnyPerUSD))/$)")
             Spacer(minLength: 0)
             Text(QuotaFormatting.tokens(usage.windowTokens))
             Text("·").foregroundStyle(.tertiary)

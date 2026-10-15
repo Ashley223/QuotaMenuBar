@@ -357,8 +357,12 @@ enum QuotaFormatting {
         }
     }
 
-    /// Dollar amount. e.g. 10.3532 → "$10.35", 0 → "$0.00".
-    static func money(_ amount: Double) -> String {
-        String(format: "$%.2f", amount)
+    /// Fixed USD→CNY rate used for display. Not fetched live (the app does no
+    /// networking); edit here if you want a different rate.
+    static let cnyPerUSD = 7.2
+
+    /// USD cost shown in yuan, whole numbers. e.g. 7.2596 → "¥52", 0 → "¥0".
+    static func money(_ usd: Double) -> String {
+        String(format: "¥%.0f", usd * cnyPerUSD)
     }
 }

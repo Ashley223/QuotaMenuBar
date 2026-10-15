@@ -97,10 +97,13 @@ struct GeminiRawCache: Decodable {
 struct DailyUsageRawCache: Decodable {
     let updatedAt: LenientDate?
     let days: [DailyUsageRawDay]
+    /// USD cost of the current calendar month so far. Absent in older caches.
+    let monthCost: Double?
 
     enum CodingKeys: String, CodingKey {
         case updatedAt = "updated_at"
         case days
+        case monthCost = "month_cost"
     }
 }
 
@@ -157,6 +160,8 @@ struct DailyUsage {
     /// Chronological, oldest first. `days.last` is today.
     let days: [Day]
     let updatedAt: Date?
+    /// USD cost of the current calendar month so far (nil for older caches).
+    let monthCost: Double?
 
     var today: Day? { days.last }
 
@@ -225,7 +230,7 @@ enum QuotaDataLoader {
             )
         }
 
-        return DailyUsage(days: days, updatedAt: raw.updatedAt?.date)
+        return DailyUsage(days: days, updatedAt: raw.updatedAt?.date, monthCost: raw.monthCost)
     }
 
     // MARK: Private Helpers
@@ -356,6 +361,9 @@ enum QuotaFormatting {
             return "\(n)"
         }
     }
+
+    /// Monthly subscription price in USD, used for the "paid back" multiple.
+    static let monthlyFeeUSD = 20.0
 
     /// Fixed USD→CNY rate used for display. Not fetched live (the app does no
     /// networking); edit here if you want a different rate.

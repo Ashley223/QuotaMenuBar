@@ -93,9 +93,11 @@ def write_atomic(data: dict) -> None:
 def main() -> int:
     today = date.today()
     start = today - timedelta(days=DAYS - 1)
+    month_start = today.replace(day=1)
+    fetch_from = min(start, month_start)  # also cover the whole month for the total
 
     try:
-        body = run_ccusage(start.strftime("%Y%m%d"))
+        body = run_ccusage(fetch_from.strftime("%Y%m%d"))
     except Exception as e:
         print(f"ccusage 调用失败: {e}", file=sys.stderr)
         return 1
@@ -117,7 +119,16 @@ def main() -> int:
             "cost": round(day_cost(r), 4),
         })
 
-    write_atomic({"updated_at": int(time.time()), "days": days})
+    month_key = today.strftime("%Y-%m")
+    month_cost = round(sum(
+        day_cost(r) for k, r in by_date.items() if k and k.startswith(month_key)
+    ), 4)
+
+    write_atomic({
+        "updated_at": int(time.time()),
+        "days": days,
+        "month_cost": month_cost,
+    })
     t = days[-1]
     print(f"刷新成功: 今日 {t['total_tokens']} tokens / ${t['cost']:.2f}")
     return 0

@@ -182,6 +182,22 @@ struct QuotaMenuBarView: View {
         .foregroundStyle(.secondary)
         .padding(.top, 5)
 
+        // Month to date vs. the subscription price
+        if let month = usage.monthCost {
+            HStack(spacing: 4) {
+                Text("This month")
+                Spacer(minLength: 0)
+                Text(QuotaFormatting.money(month))
+                Text("·").foregroundStyle(.tertiary)
+                Text(String(format: "%.1f× paid back", month / QuotaFormatting.monthlyFeeUSD))
+                    .fontWeight(.semibold)
+                    .foregroundStyle(Color.primary)
+            }
+            .font(.system(size: 10))
+            .foregroundStyle(.secondary)
+            .padding(.top, 3)
+        }
+
         ageRow(fetchedDate: usage.updatedAt)
             .padding(.top, 4)
     }

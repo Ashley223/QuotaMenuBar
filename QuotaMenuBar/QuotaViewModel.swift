@@ -58,7 +58,8 @@ final class QuotaViewModel {
     // MARK: - Menu Bar Title
 
     /// The string shown in the macOS menu bar.
-    /// Format: `☁ 5h 93% · 7d 22% · ✦ 90% · 16.3M · ≈$7.26` (last part = today's Claude Code usage)
+    /// Format: `☁ 5h 93% 7d 22% ✦ 90% $7.26` (last part = today's estimated Claude Code cost).
+    /// Kept short: on notched MacBooks a long title pushes other menu bar icons out of view.
     /// Uses system default color (no custom color on the title).
     var menuBarTitle: String {
         var parts: [String] = []
@@ -74,10 +75,10 @@ final class QuotaViewModel {
         }
 
         if let today = dailyUsage?.today, today.totalTokens > 0 {
-            parts.append("\(QuotaFormatting.tokens(today.totalTokens)) · ≈\(QuotaFormatting.money(today.cost))")
+            parts.append(QuotaFormatting.money(today.cost))
         }
 
-        return parts.isEmpty ? "✦ --" : parts.joined(separator: " · ")
+        return parts.isEmpty ? "✦ --" : parts.joined(separator: " ")
     }
 
     // MARK: - Private
